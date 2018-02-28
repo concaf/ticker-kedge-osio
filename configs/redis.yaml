@@ -1,7 +1,10 @@
 name: redis
 deploymentConfigs:
 - containers:
-  - image: redis
+  - image: containscafeine/redis-test:centos
+    env:
+    - name: MASTER
+      value: "true"
     resources:
       requests:
         memory: "10Mi"
