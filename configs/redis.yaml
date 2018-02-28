@@ -2,6 +2,10 @@ name: redis
 deploymentConfigs:
 - containers:
   - image: redis
+    resources:
+      requests:
+        memory: "10Mi"
+
 services:
 - portMappings:
   - "6379"
