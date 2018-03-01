@@ -4,7 +4,7 @@ import os
 
 app = Flask(__name__)
 host = os.environ.get('WEBDIS_HOST', 'redis')
-
+print "webdis host is: "+host
 
 @app.route('/')
 def hello():
