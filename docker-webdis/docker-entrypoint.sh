@@ -72,6 +72,7 @@ if [ $# -eq 0 ]; then
 
   tail -F ${LOGFILE:-/tmp/webdis.log} &
   echo "starting webdis.." >&2
+  redis-cli config set stop-writes-on-bgsave-error no
   webdis ${webdis_config}
 
 fi
