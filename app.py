@@ -12,8 +12,8 @@ def hello():
     app.logger.info("Now hitting: "+url)
     visits = urllib2.urlopen(url).read()
 
-    html = "<h3>Hello Kubernauts</h3> <br/>" \
-           "<h2>Number of Hits:</2> {hits}<br/>"
+    html = "<h3>Hello World!</h3> <br/>" \
+           "<h4>Number of hits: {hits}</h4><br/>"
 
     return html.format(hits=visits)
 
