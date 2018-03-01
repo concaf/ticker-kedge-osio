@@ -4,12 +4,11 @@ import os
 
 app = Flask(__name__)
 host = os.environ.get('WEBDIS_HOST', 'redis')
-print "webdis host is: "+host
 
 @app.route('/')
 def hello():
     url = "http://"+host+"/INCR/hits"
-    print "Now hitting: "+url
+    app.logger.info("Now hitting: "+url)
     visits = urllib2.urlopen(url).read()
 
     html = "<h3>Hello Kubernauts</h3> <br/>" \
