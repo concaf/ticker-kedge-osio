@@ -1,43 +1,24 @@
-# Build container images
+## Deploying on OpenShift.io
 
-### Build image
+With the current state, this application will not work out of the box. We need to do some manual confirguration in our Che pod (bad idea), but if this is a good-to-go, then we hope on baking these changes to Che anyway.
 
-```console
-$ kedge build -i surajd/ticker:0.1 -p
-INFO[0000] Building image 'surajd/ticker:0.1' from directory 'build' 
-INFO[0000] Image 'surajd/ticker:0.1' from directory 'build' built successfully 
-INFO[0000] Pushing image "surajd/ticker:0.1" to registry "docker.io" 
-INFO[0000] Multiple authentication credentials detected. Will try each configuration. 
-INFO[0000] Attempting authentication credentials for "172.30.1.1:5000" 
-ERRO[0003] Unable to push image "surajd/ticker:0.1" to registry "172.30.1.1:5000". Error: unauthorized: incorrect username or password 
-INFO[0003] Attempting authentication credentials for "https://index.docker.io/v1/" 
-INFO[0057] Successfully pushed image "surajd/ticker:0.1" to registry "https://index.docker.io/v1/" 
+First, go through the regular workflow of adding this codebase to your OpenShift.io project.
+
+Then in your Che, in the terminal,
+- Login to your OpenShift starter cluster (can be better done using a ServiceAccount). Get the login command from your OpenShift Web Console, from the top right drop down menu on clicking on your account name. Now paste this command in your Che terminal.
+
+- Next, run `setup.sh` at the root of the project like `sh setup.sh`, this will install the dependencies for the project and also get the kedge binary and place it in pwd.
+
+- Your username for OpenShift.io is generally your project name's prefix. So, project names are generally like <user>, <user-che>, <user-jenkins>, etc. We will be deploying in the <user> project, because <user-che> does not have any resources left to run a new pod. So, put this username as a value to NAMESPACE variable as below.
+Modify your Run command as:
+```
+cd ticker-kedge-osio
+NAMESPACE=<username> sh run.sh
 ```
 
-In above example flag `-p` specifies that push image after build is complete.
+- Expose your Che deployment to a service to port 5000 (this is where our Flask server wil listen on), then to a route, so we can access the Flask server from outside.
+`oc expose deployment che-ws-otfek7a1kpu5bejo --port=5000 --name=ticker`
+`oc expose service ticker`
+Get this route name using `oc get routes` and put it under `Preview URL` in your Run command.
 
-**Note**:
-
-* Above image name is `surajd/ticker:0.1`, you can put your docker hub username.
-* If you are using Kubernetes in minikube run `eval $(minikube docker-env)`, before
-running build command.
-
-### Deploying application
-
-Deploy the kedge configs in `configs` directory:
-
-```console
-$ kedge apply -f configs/
-service "ticker" created
-deployment "ticker" created
-service "redis" created
-deployment "redis" created
-```
-
-Verify that the application is running fine:
-
-```console
-$ curl `minikube ip`:30771
-<h3>Hello Kubernauts</h3> <br/><h2>Number of Hits:</2> 1<br/>
-```
-
+- That's it, code away! Make the changes and click on run, and then make changes, and click on run. Your redis will be deployed, and your changes will be reflected in real time at the preview URL shown whenever you click on Run.
