@@ -5,6 +5,7 @@ import os
 app = Flask(__name__)
 host = os.environ.get('WEBDIS_HOST', 'redis')
 
+
 @app.route('/')
 def hello():
     url = "http://"+host+"/INCR/hits"
