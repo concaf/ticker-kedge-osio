@@ -1,0 +1,12 @@
+name: webdis
+deploymentConfigs:
+- containers:
+  - image: containscafeine/webdis:latest
+    env:
+    - name: LOCAL_REDIS
+      value: "true"
+    imagePullPolicy: Always
+
+services:
+- portMappings:
+  - "7379"
