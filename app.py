@@ -8,7 +8,9 @@ host = os.environ.get('WEBDIS_HOST', 'redis')
 
 @app.route('/')
 def hello():
-    visits = urllib2.urlopen("http://"+host+"/INCR/hits").read()
+    url = "http://"+host+"/INCR/hits"
+    print "Now hitting: "+url
+    visits = urllib2.urlopen(url).read()
 
     html = "<h3>Hello Kubernauts</h3> <br/>" \
            "<h2>Number of Hits:</2> {hits}<br/>"
